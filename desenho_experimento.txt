@@ -10,6 +10,6 @@ Assim, prosseguiremos com dois testes de Tukey pro fator_1: primeiro, vamos calc
 
 Se não houver interação, iremos apenas aplicar o Tukey nas médias dos níveis dos fatores. Dito isso, caso tenham dois fatores com bastante interação, acho legal plotar o gráfico deles como descrito acima.
 
-Feito isso, vamos estimar o efeito de cada fator utilizando um modelo de regressão linear sem intercepto (para que todos os níveis estejam presentes), e fazendo ajustes pra se adequar ao formato esperado do experimento 2k.
+Feito isso, vamos estimar o efeito de cada fator utilizando um modelo de regressão linear sem intercepto (para que todos os níveis estejam presentes), e fazendo ajustes pra se adequar ao formato esperado do experimento 2k [pensando melhor, acho que não temos interesse em estimar os efeitos individuais, pois apenas queremos saber se há diferença entre os níveis dos fatores].
 
 Por fim, realizaremos a análise de resíduos (1) Normalidade dos resíduos através do QQ-plot; (2) Resíduos x Valores Preditos (aka fitted); (3) Resíduos x cada um dos Fatores.
