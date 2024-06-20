@@ -9,7 +9,7 @@ cor_oleo <- c("blue", "#8c564b")
 cor_fogo <- c("#d62728", "#ff7f0e")
 cor_mexer <- c("#1f77b4", "#e377c2")
 
-ext_graf <- 'pdf' # tipo de arquivo que os gráficos serão salvos
+ext_graf <- 'png' # tipo de arquivo que os gráficos serão salvos
 tam_graf <- c('w' = 2001, 'h' = 1500)
 path_graf <- 'gráficos'
 unit_graf <- 'px'
@@ -340,33 +340,39 @@ ggplot(lm_new_model, aes(x = .fitted,
   theme_bw()
 ggsave(paste('residuosXfitted.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
+# Resíduos x Óleo
 ggplot() +
   geom_point(
     aes(x = lm_new_model$model$Óleo, y = lm_new_model$residuals),
     size = 3
   ) +
+  geom_hline(yintercept = 0) +
   labs(title = 'Níveis do fator Óleo por resíduos',
        x = 'Níveis',
        y = 'Residuos') +
   theme_bw()
 ggsave(paste('residuosXoleo.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
+# Resíduos x Fogo
 ggplot() +
   geom_point(
     aes(x = lm_new_model$model$Fogo, y = lm_new_model$residuals),
     size = 3
   ) +
+  geom_hline(yintercept = 0) +
   labs(title = 'Níveis do fator Fogo por resíduos',
        x = 'Níveis',
        y = 'Residuos') +
   theme_bw()
 ggsave(paste('residuosXfogo.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
+# Resíduos x Mexer
 ggplot() +
   geom_point(
     aes(x = lm_new_model$model$Mexer, y = lm_new_model$residuals),
     size = 3
   ) +
+  geom_hline(yintercept = 0) +
   labs(title = 'Níveis do fator Mexer por resíduos',
        x = 'Níveis',
        y = 'Residuos') +
