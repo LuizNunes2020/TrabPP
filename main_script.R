@@ -335,8 +335,8 @@ ggplot(lm_new_model, aes(x = .fitted,
   geom_point() +
   geom_hline(yintercept = 0) +
   labs(title = 'Resíduos por valores ajustados',
-       x = 'Resíduos',
-       y = 'Ajustado') +
+       y = 'Resíduos',
+       x = 'Ajustado') +
   theme_bw()
 ggsave(paste('residuosXfitted.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
