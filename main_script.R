@@ -71,9 +71,7 @@ df <- tibble(Tipo = as.factor(Tipo),
 
 
 #--- Análise exploratória ---#
-
-
-
+# Quantidade de piruá X Tipo de pipoca
 ggplot(df, aes(x = Tipo, y = Qtt_pirua, fill = Tipo)) +
   geom_violin(alpha = 0.5) +
   scale_fill_manual(values=c(cor_tipo)) +
@@ -83,6 +81,7 @@ ggplot(df, aes(x = Tipo, y = Qtt_pirua, fill = Tipo)) +
   theme(legend.position = 'none')
 ggsave(paste('piruaXtipo.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
+# Quantidade de piruá X presença de Óleo
 ggplot(df, aes(x = Óleo, y = Qtt_pirua, fill = Óleo)) +
   geom_violin(alpha = 0.5) +
   scale_fill_manual(values=c(cor_oleo)) +
@@ -92,6 +91,7 @@ ggplot(df, aes(x = Óleo, y = Qtt_pirua, fill = Óleo)) +
   theme(legend.position = 'none') # trocar a ordem
 ggsave(paste('piruaXoleo.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
+# Quantidade de piruá X Intensidade do fogo
 ggplot(df, aes(x = Fogo, y = Qtt_pirua, fill = Fogo)) +
   geom_violin(alpha = 0.5) +
   scale_fill_manual(values=c(cor_fogo)) +
@@ -101,6 +101,7 @@ ggplot(df, aes(x = Fogo, y = Qtt_pirua, fill = Fogo)) +
   theme(legend.position = 'none')
 ggsave(paste('piruaXfogo.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
+# Quantidade de piruá X Mexer ou não
 ggplot(df, aes(x = Mexer, y = Qtt_pirua, fill = Mexer)) +
   geom_violin(alpha = 0.5) +
   scale_fill_manual(values=c(cor_mexer)) +
@@ -230,10 +231,11 @@ ggplot(df %>%
 ggsave(paste('interacaoMexer2.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
 #--- Teste de Tukey ---#
-
+# Fizemos o teste pras médias de cada um dos tratamentos, pra cada combinação dos outros dois fatores. Ou seja, tem quatro teste Tukey por fator.
 vec_li <- c()
 vec_ls <- c()
 vec_cond <- c()
+
 # Teste: Óleo
 for(i in 1:2) {
   for(j in 1:2) {
@@ -278,6 +280,8 @@ ic_df <- tibble(
   LS = vec_ls
 )
 
+# Gráficos do Tukey
+# Óleo
 ggplot(ic_df %>% filter(Fator == 'Óleo'), aes(x = Nível)) +
   geom_segment(aes(y = LI , yend = LS), linewidth = 1) +
   geom_point(aes(y = LI), size = 2) +
@@ -287,7 +291,9 @@ ggplot(ic_df %>% filter(Fator == 'Óleo'), aes(x = Nível)) +
        x = 'Efeito do fator') +
   coord_flip() +
   theme_bw()
+ggsave(paste('tukeyOleo.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
+# Fogo
 ggplot(ic_df %>% filter(Fator == 'Fogo'), aes(x = Nível)) +
   geom_segment(aes(y = LI , yend = LS), linewidth = 1) +
   geom_point(aes(y = LI), size = 2) +
@@ -297,7 +303,9 @@ ggplot(ic_df %>% filter(Fator == 'Fogo'), aes(x = Nível)) +
        x = 'Efeito do fator') +
   coord_flip() +
   theme_bw()
+ggsave(paste('tukeyMexer.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
+# Mexer
 ggplot(ic_df %>% filter(Fator == 'Mexer'), aes(x = Nível)) +
   geom_segment(aes(y = LI , yend = LS), linewidth = 1) +
   geom_point(aes(y = LI), size = 2) +
@@ -307,6 +315,7 @@ ggplot(ic_df %>% filter(Fator == 'Mexer'), aes(x = Nível)) +
        x = 'Efeito do fator') +
   coord_flip() +
   theme_bw()
+ggsave(paste('tukeyMexer.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
 #--- Análise de Resíduos ---#
 # novo modelo sem o fator Tipo e as interações que não são significativas 
