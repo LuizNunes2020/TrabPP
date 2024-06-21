@@ -4,8 +4,8 @@ library(svglite)
 #--- Metadados ---#
 set.seed(42)
 # usaremos essas cores durante todo o programa
-cor_tipo <- c("#7f7f7f", 'yellow')
-cor_oleo <- c("blue", "#8c564b")
+cor_tipo <- c("#adb5bd", '#6c757d')
+cor_oleo <- c("#70e000", "#38b000")
 cor_fogo <- c("#d62728", "#ff7f0e")
 cor_mexer <- c("#1f77b4", "#e377c2")
 
@@ -67,7 +67,7 @@ df <- tibble(Tipo = as.factor(Tipo),
              Replicação = as.factor(Replicação),
              Qtt_pirua,
              Grama_pirua
-)
+) %>% mutate(Qtt_pirua = log(Qtt_pirua))
 
 
 #--- Análise exploratória ---#
@@ -333,12 +333,15 @@ ggplot() +
 ggplot(lm_new_model, aes(x = .fitted,
            y = .resid)) +
   geom_point() +
-  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = 0, color = "red") +
   labs(title = 'Resíduos por valores ajustados',
        y = 'Resíduos',
        x = 'Ajustado') +
   theme_bw()
 ggsave(paste('residuosXfitted.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
+
+# Resíduos por ordem de coleta de dado
+# [a fazer]
 
 # Resíduos x Óleo
 ggplot() +
@@ -346,7 +349,7 @@ ggplot() +
     aes(x = lm_new_model$model$Óleo, y = lm_new_model$residuals),
     size = 3
   ) +
-  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = 0, color = "red") +
   labs(title = 'Níveis do fator Óleo por resíduos',
        x = 'Níveis',
        y = 'Residuos') +
@@ -359,7 +362,7 @@ ggplot() +
     aes(x = lm_new_model$model$Fogo, y = lm_new_model$residuals),
     size = 3
   ) +
-  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = 0, color = "red") +
   labs(title = 'Níveis do fator Fogo por resíduos',
        x = 'Níveis',
        y = 'Residuos') +
@@ -372,9 +375,10 @@ ggplot() +
     aes(x = lm_new_model$model$Mexer, y = lm_new_model$residuals),
     size = 3
   ) +
-  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = 0, color = "red") +
   labs(title = 'Níveis do fator Mexer por resíduos',
        x = 'Níveis',
        y = 'Residuos') +
   theme_bw()
 ggsave(paste('residuosXmexer.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
+
