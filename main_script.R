@@ -70,6 +70,27 @@ df <- tibble(Tipo = as.factor(Tipo),
 ) %>% mutate(Qtt_pirua = log(Qtt_pirua))
 
 
+# Colocando a ordem da experimentação
+ordem_dia_1 <- read_csv('dados/dia_1.csv') %>%
+  mutate(Intensidade_da_Chama = if_else(Intensidade_da_Chama == 'Baixa', 'Baixo', 'Alto'),
+         Mexer = if_else(Mexer == 'Sim', 'Sim', 'Não'))
+
+ordem_dia_2 <- read_csv('dados/dia_2.csv') %>%
+  mutate(Intensidade_da_Chama = if_else(Intensidade_da_Chama == 'Baixa', 'Baixo', 'Alto'),
+         Mexer = if_else(Mexer == 'Sim', 'Sim', 'Não')
+  )
+
+colnames(ordem_dia_1) <- colnames(ordem_dia_2) <- c('Tipo', 'Óleo', 'Fogo', 'Mexer')
+
+ordem_dia_1 <- ordem_dia_1 %>% mutate(Ordem = 1:16, Replicação = as.factor(1))
+ordem_dia_2 <- ordem_dia_2 %>% mutate(Ordem = 1:16, Replicação = as.factor(2))
+
+df_ordem <- ordem_dia_1 %>% add_row(ordem_dia_2)
+
+df <- full_join(df_ordem, df, by = join_by(Tipo, Óleo, Fogo, Mexer, Replicação))
+
+
+
 #--- Análise exploratória ---#
 # Quantidade de piruá X Tipo de pipoca
 ggplot(df, aes(x = Tipo, y = Qtt_pirua, fill = Tipo)) +
@@ -287,8 +308,9 @@ ggplot(ic_df %>% filter(Fator == 'Óleo'), aes(x = Nível)) +
   geom_point(aes(y = LI), size = 2) +
   geom_point(aes(y = LS), size = 2) +
   geom_hline(yintercept = 0) +
-  labs(title = 'Intervalo de confiança do Óleo para combinações de níveis de Fogo e Mexer',
-       x = 'Efeito do fator') +
+  labs(title = 'Intervalo de confiança do Óleo \npara combinações de níveis de Fogo e Mexer',
+       x = 'Efeito do fator',
+       y = 'IC') +
   coord_flip() +
   theme_bw()
 ggsave(paste('tukeyOleo.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
@@ -299,11 +321,12 @@ ggplot(ic_df %>% filter(Fator == 'Fogo'), aes(x = Nível)) +
   geom_point(aes(y = LI), size = 2) +
   geom_point(aes(y = LS), size = 2) +
   geom_hline(yintercept = 0) +
-  labs(title = 'Intervalo de confiança do Fogo para combinações de níveis de Óleo e Mexer',
-       x = 'Efeito do fator') +
+  labs(title = 'Intervalo de confiança do Fogo \npara combinações de níveis de Óleo e Mexer',
+       x = 'Efeito do fator',
+       y = 'IC') +
   coord_flip() +
   theme_bw()
-ggsave(paste('tukeyMexer.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
+ggsave(paste('tukeyFogo.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
 # Mexer
 ggplot(ic_df %>% filter(Fator == 'Mexer'), aes(x = Nível)) +
@@ -311,8 +334,9 @@ ggplot(ic_df %>% filter(Fator == 'Mexer'), aes(x = Nível)) +
   geom_point(aes(y = LI), size = 2) +
   geom_point(aes(y = LS), size = 2) +
   geom_hline(yintercept = 0) +
-  labs(title = 'Intervalo de confiança de Mexer para combinações de níveis de Óleo e Fogo',
-       x = 'Efeito do fator') +
+  labs(title = 'Intervalo de confiança de Mexer \npara combinações de níveis de Óleo e Fogo',
+       x = 'Efeito do fator',
+       y = 'IC') +
   coord_flip() +
   theme_bw()
 ggsave(paste('tukeyMexer.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
@@ -350,7 +374,17 @@ ggplot(lm_new_model, aes(x = .fitted,
 ggsave(paste('residuosXfitted.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
 # Resíduos por ordem de coleta de dado
-# [a fazer]
+ggplot() +
+  geom_point(
+    aes(x = 1:32, y = lm_new_model$residuals),
+    size = 3
+  ) +
+  geom_hline(yintercept = 0, color = "red") +
+  labs(title = 'Resíduos por ordem de experimentação',
+       x = 'Ordem',
+       y = 'Residuos') +
+  theme_bw()
+ggsave(paste('residuosXordem.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
 # Resíduos x Óleo
 ggplot() +
@@ -359,7 +393,7 @@ ggplot() +
     size = 3
   ) +
   geom_hline(yintercept = 0, color = "red") +
-  labs(title = 'Níveis do fator Óleo por resíduos',
+  labs(title = 'Resíduos por níveis do fator Óleo',
        x = 'Níveis',
        y = 'Residuos') +
   theme_bw()
@@ -372,7 +406,7 @@ ggplot() +
     size = 3
   ) +
   geom_hline(yintercept = 0, color = "red") +
-  labs(title = 'Níveis do fator Fogo por resíduos',
+  labs(title = 'Resíduos por níveis do fator Fogo',
        x = 'Níveis',
        y = 'Residuos') +
   theme_bw()
@@ -385,9 +419,12 @@ ggplot() +
     size = 3
   ) +
   geom_hline(yintercept = 0, color = "red") +
-  labs(title = 'Níveis do fator Mexer por resíduos',
+  labs(title = 'Resíduos por níveis do fator Mexer',
        x = 'Níveis',
        y = 'Residuos') +
   theme_bw()
 ggsave(paste('residuosXmexer.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
+
+
+
 

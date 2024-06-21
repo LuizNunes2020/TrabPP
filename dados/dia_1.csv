@@ -1,0 +1,17 @@
+Tipo_de_Pipoca,Quantidade_de_Oleo,Intensidade_da_Chama,Mexer
+Normal,Com,Media,Não
+Premium,Com,Media,Não
+Normal,Com,Baixa,Sim
+Premium,Sem,Media,Não
+Premium,Sem,Baixa,Não
+Premium,Sem,Baixa,Sim
+Premium,Sem,Media,Sim
+Normal,Sem,Media,Sim
+Premium,Com,Baixa,Sim
+Premium,Com,Baixa,Não
+Normal,Com,Media,Sim
+Normal,Sem,Baixa,Sim
+Normal,Com,Baixa,Não
+Normal,Sem,Media,Não
+Premium,Com,Media,Sim
+Normal,Sem,Baixa,Não
