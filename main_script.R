@@ -322,7 +322,7 @@ ggsave(paste('tukeyMexer.', ext_graf, sep = ''), path = path_graf, device = ext_
 lm_new_model <- lm(Qtt_pirua ~
             Óleo * Fogo * Mexer +
             Replicação,
-          df) # eu sei que os dados não parecem muito normais, mas rode esse exemplo algumas vezes e veja cada absurdo que aparece:
+          df)
 # QQ PLOT
 ggplot() +
   geom_qq(aes(sample = rstandard(lm_new_model))) +
