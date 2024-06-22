@@ -13,3 +13,13 @@ Se não houver interação, iremos apenas aplicar o Tukey nas médias dos nívei
 Feito isso, vamos estimar o efeito de cada fator utilizando um modelo de regressão linear sem intercepto (para que todos os níveis estejam presentes), e fazendo ajustes pra se adequar ao formato esperado do experimento 2k [pensando melhor, acho que não temos interesse em estimar os efeitos individuais, pois apenas queremos saber se há diferença entre os níveis dos fatores].
 
 Por fim, realizaremos a análise de resíduos (1) Normalidade dos resíduos através do QQ-plot; (2) Resíduos x Valores Preditos (aka fitted); (3) Resíduos x cada um dos Fatores.
+
+
+------- Métodos -------
+Em primeiro lugar, foi feita a análise descritiva dos dados por meio dos gráficos de quantidade de piruá por níveis do fator para cada um dos fatores.
+
+Em seguida, foi realizado um teste ANOVA para verificar quais fatores são significativos, se há interação entre eles, e se há interação entre o bloco e algum deles; prosseguimos a análise sem os fatores que não são significativos.
+
+Feito isso, como tivemos interação significativa entre os fatores, para as médias dos níveis de cada um deles, plotamos-as , bem como as testamos para diferença significante usando Tukey para todas as combinações de níveis dos outros fatores.
+
+Por fim, realizamos a análise dos resíduos foi feita por meio do gráficos QQ plot, resíduos por ordem de coleta de dado, resíduos por valores esperados, e resíduos por cada um dos fatores.
