@@ -67,8 +67,25 @@ df <- tibble(Tipo = as.factor(Tipo),
              Replicação = as.factor(Replicação),
              Qtt_pirua,
              Grama_pirua
-) %>% mutate(Qtt_pirua = log(Qtt_pirua))
+) #%>% mutate(Qtt_pirua = log(Qtt_pirua)) retirada momentanea
 
+#--- Teste de homocedasticidade ---#
+# Utilizando mediana para maior robustez
+# modelo sem ln
+library(lawstat)
+# Precisa ver se pode fazer os teste um de cada vez, só achei teste para um fator
+teste_levene <- data.frame(Grupo = colnames(df[,1:4]),P_valor = rep(0,4))
+for (i in 1:4){
+  teste_levene[i,2] <- levene.test(df$Qtt_pirua,df[,i,1])$p.value[1]
+}
+
+# modelo com ln
+df <- df %>% mutate(Qtt_pirua = log(Qtt_pirua))
+
+teste_levene_2 <- data.frame(Grupo = colnames(df[,1:4]),P_valor = rep(0,4))
+for (i in 1:4){
+  teste_levene_2[i,2] <- levene.test(df$Qtt_pirua,df[,i,1])$p.value[1]
+}
 
 # Colocando a ordem da experimentação
 ordem_dia_1 <- read_csv('dados/dia_1.csv') %>%
@@ -132,14 +149,13 @@ ggplot(df, aes(x = Mexer, y = Qtt_pirua, fill = Mexer)) +
   theme(legend.position = 'none')
 ggsave(paste('piruaXmexer.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
 
-
 #--- ANOVA ---#
 lm_model <- lm(Qtt_pirua ~
-              Tipo * Óleo * Fogo * Mexer +
-              Replicação * Óleo +
-              Replicação * Fogo +
-              Replicação * Mexer,
-            df) # Replicação aqui, essencialmente, faz o papel da blocagem
+                 Tipo * Óleo * Fogo * Mexer +
+                 Replicação * Óleo +
+                 Replicação * Fogo +
+                 Replicação * Mexer,
+               df) # Replicação aqui, essencialmente, faz o papel da blocagem
 
 
 anova(lm_model)
@@ -344,9 +360,9 @@ ggsave(paste('tukeyMexer.', ext_graf, sep = ''), path = path_graf, device = ext_
 #--- Análise de Resíduos ---#
 # novo modelo sem o fator Tipo e as interações que não são significativas 
 lm_new_model <- lm(Qtt_pirua ~
-            Óleo * Fogo * Mexer +
-            Replicação,
-          df)
+                     Óleo * Fogo * Mexer +
+                     Replicação,
+                   df)
 # QQ PLOT
 ggplot() +
   geom_qq(aes(sample = rstandard(lm_new_model))) +
@@ -364,7 +380,7 @@ ggplot() +
 
 # Resíduos x Fitted
 ggplot(lm_new_model, aes(x = .fitted,
-           y = .resid)) +
+                         y = .resid)) +
   geom_point() +
   geom_hline(yintercept = 0, color = "red") +
   labs(title = 'Resíduos por valores ajustados',
@@ -424,7 +440,6 @@ ggplot() +
        y = 'Residuos') +
   theme_bw()
 ggsave(paste('residuosXmexer.', ext_graf, sep = ''), path = path_graf, device = ext_graf, width = tam_graf[1], height = tam_graf[2], units = unit_graf)
-
 
 
 
